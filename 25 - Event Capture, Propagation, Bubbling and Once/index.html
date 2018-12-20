@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Understanding JavaScript's Capture</title>
+  </head>
+  <body class="bod">
+    <div class="one">
+      <div class="two"><div class="three"></div></div>
+    </div>
+
+    <style>
+      html {
+        box-sizing: border-box;
+      }
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+
+      div {
+        width: 100%;
+        padding: 100px;
+      }
+
+      .one {
+        background: thistle;
+      }
+
+      .two {
+        background: mistyrose;
+      }
+
+      .three {
+        background: coral;
+      }
+    </style>
+
+    <button></button>
+    <script>
+      // Event bubbling: bottom to top
+      //    Execution of event goes from bottom to top
+
+      // Event capturing: top to bottom
+      //    Clicking an element captures/handles the element from top to bottom
+      //    Execute parent event first, then child event
+
+      const divs = document.querySelectorAll('div');
+      const button = document.querySelector('button');
+
+      function logText(e) {
+        console.log(this.classList.value);
+        // e.stopPropagation(); // stop bubbling the event up
+        // console.log(this);
+      }
+
+      // document.body.addEventListener('click', logText);
+
+      divs.forEach(div =>
+        div.addEventListener('click', logText, {
+          capture: false, // if true, run function on the way down rather than on the way up
+          once: true
+        })
+      );
+
+      button.addEventListener(
+        'click',
+        () => {
+          console.log('Click');
+        },
+        {
+          once: true
+        }
+      );
+    </script>
+  </body>
+</html>
